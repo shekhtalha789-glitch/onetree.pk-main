@@ -12,6 +12,24 @@
 <meta property="og:type" content="website">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<script>
+  (function redirectLegacyTreeHashRoute() {
+    const hash = window.location.hash || '';
+    const match = hash.match(/^#\/tree\/([^/?#]+)/i);
+    if (!match) return;
+
+    const identifier = decodeURIComponent(match[1]).trim();
+    if (!/^[A-Za-z0-9_-]{1,128}$/.test(identifier)) return;
+
+    const pathname = window.location.pathname || '/';
+    const basePath = pathname.endsWith('.html')
+      ? pathname.slice(0, pathname.lastIndexOf('/') + 1)
+      : (pathname.endsWith('/') ? pathname : pathname + '/');
+
+    const target = basePath + 'public-tree.html?tree_code=' + encodeURIComponent(identifier);
+    window.location.replace(target);
+  })();
+</script>
 </head>
 <body>
 
