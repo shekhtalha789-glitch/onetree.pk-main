@@ -112,10 +112,26 @@ If your site is already live on GitHub Pages:
 
 `public-tree.html` is the dedicated anonymous QR destination and is intentionally hidden from nav/footer.
 
+### One QR = One Tree (no manual ID work for users)
+- Each tree has a unique identifier (`tree_code`, fallback `id`).
+- The app generates a tree-specific QR URL automatically.
+- When user scans QR, the page opens that exact tree profile automatically.
+- Manual ID changes are only for QA/testing, not for normal users.
+
 ### Canonical QR format
 Use this URL format when generating QR codes:
 ```text
 https://YOUR-DOMAIN/public-tree.html?tree_code=<TREE_CODE>
+```
+
+### Legacy QR compatibility
+Old printed links with hash route are still supported:
+```text
+https://YOUR-DOMAIN/#/tree/<TREE_CODE_OR_ID>
+```
+They are redirected by `index.html` to:
+```text
+https://YOUR-DOMAIN/public-tree.html?tree_code=<TREE_CODE_OR_ID>
 ```
 
 ### Does it go live automatically?
@@ -128,6 +144,31 @@ Any commit pushed to `main` auto-deploys in about 1-2 minutes.
 3. Push the same tested code to `main`.
 4. Wait 1-2 minutes and run production smoke tests.
 
+### Mobile app required changes (in `one_tree` project)
+Apply these in the mobile app repo so newly generated QR codes always open the anonymous public page:
+
+1. Update QR URL builder  
+File: `lib/core/constants/app_constants.dart`  
+Use:
+```dart
+static String publicTreeWebUrl(String identifier) =>
+    '$webBaseUrl/public-tree.html?tree_code=$identifier';
+```
+
+2. Ensure all QR emitters use that shared helper  
+Files to verify:
+- `lib/features/plant_tree/screens/tree_qr_screen.dart`
+- `lib/features/tree_tracker/screens/tree_tracker_screen.dart`
+- `lib/core/utils/tree_certificate_generator.dart`
+- `lib/features/home/screens/home_screen.dart`
+
+3. Optional hardening (recommended)  
+Use query encoding for long-term safety:
+```dart
+static String publicTreeWebUrl(String identifier) =>
+    '$webBaseUrl/public-tree.html?tree_code=${Uri.encodeQueryComponent(identifier)}';
+```
+
 ### Test checklist
 1. Valid tree: `public-tree.html?tree_code=<real_code>` loads correct data.
 2. Invalid code format: shows `Invalid QR Code`.
@@ -136,6 +177,8 @@ Any commit pushed to `main` auto-deploys in about 1-2 minutes.
 5. Confirm no CTA/download buttons appear on `public-tree.html`.
 6. Confirm network call is RPC only: `get_public_tree_profile`.
 7. Confirm no direct table reads from frontend.
+8. New QR from app opens correct tree in Google Lens.
+9. Old `#/tree/...` QR also opens correct tree via redirect.
 
 ---
 
