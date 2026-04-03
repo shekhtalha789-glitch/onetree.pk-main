@@ -108,6 +108,37 @@ If your site is already live on GitHub Pages:
 
 ---
 
+## 🌲 Anonymous QR Page (Production Flow)
+
+`public-tree.html` is the dedicated anonymous QR destination and is intentionally hidden from nav/footer.
+
+### Canonical QR format
+Use this URL format when generating QR codes:
+```text
+https://YOUR-DOMAIN/public-tree.html?tree_code=<TREE_CODE>
+```
+
+### Does it go live automatically?
+Yes. This repo uses GitHub Pages from `main` (root).  
+Any commit pushed to `main` auto-deploys in about 1-2 minutes.
+
+### Safe release flow (recommended)
+1. Validate first on local/staging URL.
+2. Run the test checklist below.
+3. Push the same tested code to `main`.
+4. Wait 1-2 minutes and run production smoke tests.
+
+### Test checklist
+1. Valid tree: `public-tree.html?tree_code=<real_code>` loads correct data.
+2. Invalid code format: shows `Invalid QR Code`.
+3. Unknown code: shows `Tree Not Found`.
+4. Inactive tree: shows unavailable/null behavior.
+5. Confirm no CTA/download buttons appear on `public-tree.html`.
+6. Confirm network call is RPC only: `get_public_tree_profile`.
+7. Confirm no direct table reads from frontend.
+
+---
+
 ## 📧 Contact / Support
 
 For help, email: hello@onetree.pk
