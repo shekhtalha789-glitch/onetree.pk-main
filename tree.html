@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tree Details - OneTree Pakistan</title>
+<meta name="description" content="View details of this tree planted through OneTree Pakistan.">
+<meta name="theme-color" content="#2E7D32">
+<!-- Open Graph (for social sharing previews) -->
+<meta property="og:title" content="Tree Details - OneTree Pakistan">
+<meta property="og:description" content="View details of this tree planted through OneTree Pakistan.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://onetree.pk/images/onetree.png">
+<meta name="robots" content="index,follow">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* Additional styles for tree page */
+.tree-container { max-width: 800px; margin: 120px auto 80px; padding: 0 32px; }
+.tree-header { text-align: center; margin-bottom: 40px; }
+.tree-title { font-family: 'Poppins', sans-serif; font-size: 2.5rem; color: var(--g-primary); margin-bottom: 10px; }
+.tree-subtitle { font-size: 1.1rem; color: var(--text-muted); }
+.tree-card { background: white; border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-md); margin-bottom: 32px; }
+.tree-info { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.tree-field { margin-bottom: 20px; }
+.tree-label { font-weight: 600; color: var(--text-dark); margin-bottom: 5px; }
+.tree-value { color: var(--text-muted); }
+.tree-photos { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 20px; }
+.tree-photo { width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius-md); }
+.loading { text-align: center; padding: 100px 0; }
+.error { text-align: center; padding: 100px 0; color: #d32f2f; }
+.empty-photos { margin-top: 12px; color: var(--text-muted); font-size: 0.95rem; }
+@media (max-width: 768px) { .tree-info { grid-template-columns: 1fr; } .tree-container { padding: 0 16px; margin-top: 100px; } }
+</style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ───────────────────────────────────────────── -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon" style="padding: 10px;">
+        <img src="images/onetree.png" alt="logo" width="100px" height="100px">
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#how">How It Works</a></li>
+      <li><a href="index.html#impact">Impact</a></li>
+      <li><a href="index.html#download">Download App</a></li>
+    </ul>
+    <a href="index.html#download" class="btn-nav">Plant Your Impact</a>
+    <div class="hamburger" onclick="openMobile()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── MOBILE MENU ──────────────────────────────────────── -->
+<div class="mobile-menu" id="mobileMenu">
+  <span class="close-btn" onclick="closeMobile()">×</span>
+  <a href="index.html" onclick="closeMobile()">Home</a>
+  <a href="index.html#how" onclick="closeMobile()">How It Works</a>
+  <a href="index.html#impact" onclick="closeMobile()">Impact</a>
+  <a href="index.html#download" onclick="closeMobile()">Download App</a>
+  <a href="index.html#download" class="btn-nav" onclick="closeMobile()" style="font-size:1rem;padding:14px 32px;">Plant Your Impact</a>
+</div>
+
+<!-- ─── TREE CONTENT ──────────────────────────────────────── -->
+<div class="tree-container">
+  <div id="loading" class="loading">
+    <p id="loading-text">Loading tree details...</p>
+  </div>
+  <div id="error" class="error" style="display: none;">
+    <h2 id="error-title">Tree Not Found</h2>
+    <p id="error-text">The tree you're looking for doesn't exist or has been removed.</p>
+  </div>
+  <div id="tree-content" style="display: none;">
+    <div class="tree-header">
+      <h1 class="tree-title" id="tree-name">Tree Name</h1>
+      <p class="tree-subtitle" id="tree-species">Species</p>
+    </div>
+    <div class="tree-card">
+      <div class="tree-info">
+        <div class="tree-field">
+          <div class="tree-label">Tree Code</div>
+          <div class="tree-value" id="tree-code"></div>
+        </div>
+        <div class="tree-field">
+          <div class="tree-label">Reference Code</div>
+          <div class="tree-value" id="ref-code"></div>
+        </div>
+        <div class="tree-field">
+          <div class="tree-label">Planted Date</div>
+          <div class="tree-value" id="planted-date"></div>
+        </div>
+        <div class="tree-field">
+          <div class="tree-label">Location</div>
+          <div class="tree-value" id="location"></div>
+        </div>
+        <div class="tree-field">
+          <div class="tree-label">Planter</div>
+          <div class="tree-value" id="planter"></div>
+        </div>
+        <div class="tree-field">
+          <div class="tree-label">Sponsor</div>
+          <div class="tree-value" id="sponsor"></div>
+        </div>
+        <div class="tree-field">
+          <div class="tree-label">Status</div>
+          <div class="tree-value" id="status"></div>
+        </div>
+        <div class="tree-field">
+          <div class="tree-label">Progress</div>
+          <div class="tree-value" id="progress"></div>
+        </div>
+        <div class="tree-field">
+          <div class="tree-label">Health Score</div>
+          <div class="tree-value" id="health-score"></div>
+        </div>
+        <div class="tree-field">
+          <div class="tree-label">CO2 Absorbed</div>
+          <div class="tree-value" id="co2-absorbed"></div>
+        </div>
+        <div class="tree-field">
+          <div class="tree-label">Drive</div>
+          <div class="tree-value" id="drive-name"></div>
+        </div>
+        <div class="tree-field">
+          <div class="tree-label">Coordinates</div>
+          <div class="tree-value" id="coordinates"></div>
+        </div>
+        <div class="tree-field" style="grid-column: span 2;">
+          <div class="tree-label">Description</div>
+          <div class="tree-value" id="description"></div>
+        </div>
+      </div>
+      <div class="tree-photos" id="photos"></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/*
+  Set your public Supabase details here (or inject from your deployment pipeline).
+  Using anon key on a public page is expected. Keep RLS enabled for data safety.
+*/
+const SUPABASE_CONFIG = window.__ONETREE_SUPABASE__ || {
+  url: 'YOUR_SUPABASE_URL',
+  anonKey: 'YOUR_SUPABASE_ANON_KEY'
+};
+
+const treeIdentifier = resolveTreeIdentifier();
+
+if (!isLikelySafeIdentifier(treeIdentifier)) {
+  showError('Invalid QR Code', 'This QR code is invalid or incomplete.');
+} else if (isSupabaseConfigMissing()) {
+  showError(
+    'Configuration Missing',
+    'Supabase public credentials are not set for this page.'
+  );
+} else {
+  fetchTreeData(treeIdentifier.trim());
+}
+
+function isSupabaseConfigMissing() {
+  const missingUrl = !SUPABASE_CONFIG.url || SUPABASE_CONFIG.url.indexOf('YOUR_SUPABASE_URL') === 0;
+  const missingKey = !SUPABASE_CONFIG.anonKey || SUPABASE_CONFIG.anonKey.indexOf('YOUR_SUPABASE_ANON_KEY') === 0;
+  return missingUrl || missingKey;
+}
+
+function resolveTreeIdentifier() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const fromQuery = pickFirst(
+    urlParams.get('tree_code'),
+    urlParams.get('tree_id'),
+    urlParams.get('id'),
+    tryParseQrPayload(urlParams.get('qr')),
+    tryParseQrPayload(urlParams.get('payload'))
+  );
+  if (fromQuery) return fromQuery;
+
+  const pathParts = window.location.pathname.split('/').filter(Boolean);
+  const treeSegmentIndex = pathParts.findIndex((part) => part.toLowerCase() === 'tree');
+  if (treeSegmentIndex > -1 && pathParts[treeSegmentIndex + 1]) {
+    return pathParts[treeSegmentIndex + 1];
+  }
+
+  return '';
+}
+
+function pickFirst() {
+  for (let i = 0; i < arguments.length; i += 1) {
+    const value = arguments[i];
+    if (value !== null && value !== undefined && String(value).trim() !== '') {
+      return String(value).trim();
+    }
+  }
+  return '';
+}
+
+function tryParseQrPayload(rawPayload) {
+  if (!rawPayload) return '';
+  let payload = rawPayload.trim();
+  try {
+    payload = decodeURIComponent(rawPayload).trim();
+  } catch (_) {
+    payload = rawPayload.trim();
+  }
+  if (!payload.startsWith('{')) return '';
+  try {
+    const parsed = JSON.parse(payload);
+    return pickFirst(parsed.tree_code, parsed.tree_id, parsed.id);
+  } catch (_) {
+    return '';
+  }
+}
+
+function isLikelySafeIdentifier(value) {
+  if (!value || value.length > 128) return false;
+  return /^[a-zA-Z0-9_-]+$/.test(value);
+}
+
+function createSupabaseClient() {
+  return window.supabase.createClient(
+    SUPABASE_CONFIG.url,
+    SUPABASE_CONFIG.anonKey,
+    { auth: { persistSession: false } }
+  );
+}
+
+async function fetchTreeData(identifier) {
+  setLoading('Loading tree details...');
+  const client = createSupabaseClient();
+  const { data, error } = await client.rpc('get_public_tree_profile', {
+    p_identifier: identifier
+  });
+
+  if (error) {
+    showError(
+      'Unable to Load Tree',
+      'We could not load tree details right now. Please try again shortly.'
+    );
+    return;
+  }
+
+  if (!data) {
+    showError(
+      'Tree Not Found',
+      'This tree record does not exist, or it is not publicly visible.'
+    );
+    return;
+  }
+
+  const visibility = getVisibilityState(data);
+  if (visibility !== 'public') {
+    const hiddenReason = visibility === 'private'
+      ? 'This tree is private and cannot be viewed publicly.'
+      : 'This tree is currently inactive and unavailable.';
+    showError('Tree Unavailable', hiddenReason);
+    return;
+  }
+
+  displayTree(normalizeTree(data));
+}
+
+function getVisibilityState(tree) {
+  if (tree.is_public === false || tree.private === true) return 'private';
+  if (tree.is_active === false) return 'inactive';
+  if (String(tree.status || '').toLowerCase() === 'inactive') return 'inactive';
+  return 'public';
+}
+
+function normalizeTree(tree) {
+  const firstNotEmpty = (...values) =>
+    values.find((value) => value !== null && value !== undefined && String(value).trim() !== '') || '';
+
+  const photosValue = firstNotEmpty(tree.photos, tree.photo_urls, tree.image_urls, tree.images);
+  const rawPhotos = Array.isArray(photosValue)
+    ? photosValue
+    : typeof photosValue === 'string' && photosValue.trim().startsWith('[')
+      ? safeJsonArray(photosValue)
+      : typeof photosValue === 'string' && photosValue.trim() !== ''
+        ? [photosValue]
+        : [];
+
+  const photos = rawPhotos
+    .map((item) => {
+      if (typeof item === 'string') return item;
+      if (item && typeof item === 'object') return firstNotEmpty(item.photo_url, item.url, '');
+      return '';
+    })
+    .filter(Boolean);
+
+  const primaryPhoto = firstNotEmpty(tree.photo_url, photos[0], '');
+
+  return {
+    treeCode: firstNotEmpty(tree.tree_code, tree.code, 'N/A'),
+    refCode: firstNotEmpty(tree.ref_code, 'N/A'),
+    name: firstNotEmpty(tree.name, tree.tree_name, tree.tree_code, 'Unnamed Tree'),
+    species: firstNotEmpty(tree.species, tree.species_name, 'Species not specified'),
+    plantedDate: firstNotEmpty(tree.planted_date, tree.created_at, tree.date_planted, ''),
+    location: firstNotEmpty(tree.location, tree.city, tree.address, 'Not shared publicly'),
+    planter: firstNotEmpty(tree.planter_name, tree.planter, tree.owner_name, 'OneTree Community'),
+    sponsor: firstNotEmpty(tree.sponsor_name, 'N/A'),
+    driveName: firstNotEmpty(tree.drive_name, 'N/A'),
+    status: firstNotEmpty(tree.status, 'Active'),
+    progress: firstNotEmpty(tree.progress, 'N/A'),
+    healthScore: firstNotEmpty(tree.health_score, 'N/A'),
+    co2Absorbed: firstNotEmpty(tree.co2_absorbed, 'N/A'),
+    latitude: firstNotEmpty(tree.latitude, ''),
+    longitude: firstNotEmpty(tree.longitude, ''),
+    description: firstNotEmpty(tree.description, tree.story, 'No description available.'),
+    photos: primaryPhoto ? [primaryPhoto, ...photos.filter((p) => p !== primaryPhoto)] : photos
+  };
+}
+
+function safeJsonArray(value) {
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (_) {
+    return [];
+  }
+}
+
+function displayTree(tree) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('error').style.display = 'none';
+  document.getElementById('tree-content').style.display = 'block';
+
+  document.getElementById('tree-name').textContent = tree.name;
+  document.getElementById('tree-species').textContent = tree.species;
+  document.getElementById('tree-code').textContent = tree.treeCode;
+  document.getElementById('ref-code').textContent = tree.refCode;
+  document.getElementById('planted-date').textContent = formatDate(tree.plantedDate);
+  document.getElementById('location').textContent = tree.location;
+  document.getElementById('planter').textContent = tree.planter;
+  document.getElementById('sponsor').textContent = tree.sponsor;
+  document.getElementById('drive-name').textContent = tree.driveName;
+  document.getElementById('coordinates').textContent = formatCoordinates(tree.latitude, tree.longitude);
+  document.getElementById('status').textContent = tree.status;
+  document.getElementById('progress').textContent = String(tree.progress);
+  document.getElementById('health-score').textContent = String(tree.healthScore);
+  document.getElementById('co2-absorbed').textContent = String(tree.co2Absorbed);
+  document.getElementById('description').textContent = tree.description;
+
+  const photosContainer = document.getElementById('photos');
+  photosContainer.innerHTML = '';
+  if (tree.photos.length === 0) {
+    const empty = document.createElement('p');
+    empty.className = 'empty-photos';
+    empty.textContent = 'No public photos available yet.';
+    photosContainer.appendChild(empty);
+  } else {
+    const fragment = document.createDocumentFragment();
+    tree.photos.forEach((photo) => {
+      const img = document.createElement('img');
+      img.src = photo;
+      img.alt = 'Tree photo';
+      img.className = 'tree-photo';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      fragment.appendChild(img);
+    });
+    photosContainer.appendChild(fragment);
+  }
+
+  // Update meta tags for SEO
+  document.title = `${tree.name} - OneTree Pakistan`;
+  document.querySelector('meta[name="description"]').content = `View details of ${tree.name}, a ${tree.species} planted in ${tree.location} through OneTree Pakistan.`;
+  document.querySelector('meta[property="og:title"]').content = `${tree.name} - OneTree Pakistan`;
+  document.querySelector('meta[property="og:description"]').content = `View details of ${tree.name}, a ${tree.species} planted in ${tree.location} through OneTree Pakistan.`;
+  if (tree.photos.length > 0) {
+    document.querySelector('meta[property="og:image"]').content = tree.photos[0];
+  }
+}
+
+function setLoading(text) {
+  document.getElementById('loading-text').textContent = text || 'Loading tree details...';
+}
+
+function formatDate(value) {
+  if (!value) return 'Not available';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return 'Not available';
+  return date.toLocaleDateString('en-PK', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function formatCoordinates(latitude, longitude) {
+  if (latitude === '' || longitude === '' || latitude === null || longitude === null) return 'Not available';
+  return `${latitude}, ${longitude}`;
+}
+
+function showError(title, message) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('tree-content').style.display = 'none';
+  document.getElementById('error').style.display = 'block';
+  document.getElementById('error-title').textContent = title || 'Tree Not Found';
+  document.getElementById('error-text').textContent =
+    message || 'The tree you are looking for does not exist or has been removed.';
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'GA_TRACKING_ID');
+</script>
+
+</body>
+</html>
