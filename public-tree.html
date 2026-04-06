@@ -11,7 +11,7 @@
 <meta property="og:description" content="View details of this tree planted through OneTree Pakistan.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://onetree.pk/images/onetree.png">
-<meta name="robots" content="noindex,nofollow">
+<meta name="robots" content="noindex,follow">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <style>
@@ -30,6 +30,7 @@
 .loading { text-align: center; padding: 100px 0; }
 .error { text-align: center; padding: 100px 0; color: #d32f2f; }
 .empty-photos { margin-top: 12px; color: var(--text-muted); font-size: 0.95rem; }
+.error-home-link { display: inline-block; margin-top: 16px; color: #2E7D32; font-weight: 600; text-decoration: none; }
 .public-header {
   padding: 18px 24px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
@@ -50,7 +51,7 @@
 <body>
 
 <header class="public-header" aria-label="OneTree Header">
-  <img class="public-brand" src="images/onetree.png" alt="OneTree Pakistan">
+  <a href="/"><img class="public-brand" src="images/onetree.png" alt="OneTree Pakistan"></a>
 </header>
 
 <!-- ─── TREE CONTENT ──────────────────────────────────────── -->
@@ -61,6 +62,7 @@
   <div id="error" class="error" style="display: none;">
     <h2 id="error-title">Tree Not Found</h2>
     <p id="error-text">The tree you're looking for doesn't exist or has been removed.</p>
+    <a href="/" class="error-home-link">&#8592; Back to OneTree</a>
   </div>
   <div id="tree-content" style="display: none;">
     <div class="tree-header">
