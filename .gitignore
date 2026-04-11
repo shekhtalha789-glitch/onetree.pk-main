@@ -1,0 +1,9 @@
+# IDE
+.idea/
+
+# Local environment — never commit real credentials
+.env
+
+# Runtime config — generated locally or by CI from secrets
+# Copy js/config.example.js → js/config.js and fill in your values
+js/config.js
